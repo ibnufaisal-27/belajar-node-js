@@ -14,7 +14,7 @@ yargs.command({
         },
         email: {
             describe: "Email of the contact",
-            demandOption: true,
+            demandOption: false,
             type: "string",
         },
         noHp: {
@@ -25,6 +25,47 @@ yargs.command({
     },
     handler(argv) {
         contacts.saveContact(argv.name, argv.email,argv.noHp)
+    },
+}).demandCommand()
+
+// list contacts
+yargs.command({
+    command: "list",
+    describe: "List all contacts",
+    handler() {
+        contacts.listContacts()
+    },
+})
+
+// detail contacts
+yargs.command({
+    command: "detail",
+    describe: "Detail contacts",
+    builder: {
+        name: {
+            describe: "Name of the contact",
+            demandOption: true,
+            type: "string",
+        },
+    },
+    handler(argv) {
+        contacts.detailContact(argv.name);
+    },
+})
+
+// remove contact
+yargs.command({
+    command: "remove",
+    describe: "Remove a contact",
+    builder: {
+        name: {
+            describe: "Name of the contact",
+            demandOption: true,
+            type: "string",
+        },
+    },
+    handler(argv) {
+        contacts.removeContact(argv.name);
     },
 })
 
