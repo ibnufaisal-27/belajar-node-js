@@ -28,11 +28,17 @@ const saveContact = (name, email, noHp) => {
     }
 
     // check format email
-    if(email) {
-        if(!validator.isEmail(email)) {
+    if (email) {
+        if (!validator.isEmail(email)) {
             console.log(`Email ${email} tidak valid.`)
             return
         }
+    }
+
+    // check format mobile phone
+    if (!validator.isMobilePhone(noHp, 'id-ID')) {
+        console.log(`Nomor HP ${noHp} tidak valid.`)
+        return
     }
 
 
