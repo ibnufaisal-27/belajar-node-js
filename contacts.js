@@ -1,12 +1,7 @@
 // Core Module
 // File System
 const fs = require('fs')
-
-const readline = require('readline')
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-})
+const validator = require('validator')
 
 // create directory if not exists
 const dirPath = './data'
@@ -20,28 +15,34 @@ if (!fs.existsSync(dataPath)) {
     fs.writeFileSync(dataPath, JSON.stringify([]), 'utf-8')
 }
 
-const tulisPertanyaan = (pertanyaan) => {
-    return new Promise((resolve, reject) => {
-        rl.question(pertanyaan, (nama) => {
-            resolve(nama)
-        })
-    })
-}
-
-const simpanContact = (nama, email, noHp) => {
-    const contact = {nama, email, noHp}
+const saveContact = (name, email, noHp) => {
+    const contact = {name, email, noHp}
     const file = fs.readFileSync('data/contacts.json', 'utf-8')
     const contacts = JSON.parse(file)
-    contacts.push(contact)
 
+    // check duplicates
+    const isDuplicate = contacts.find(c => c.name === name)
+    if (isDuplicate) {
+        console.log(`Nama ${name} sudah terdaftar.`)
+        return
+    }
+
+    // check format email
+    if(email) {
+        if(!validator.isEmail(email)) {
+            console.log(`Email ${email} tidak valid.`)
+            return
+        }
+    }
+
+
+    contacts.push(contact)
     fs.writeFileSync(('data/contacts.json'), JSON.stringify(contacts))
 
     console.log(`Terima kasih sudah memasukkan data.`)
 
-    rl.close()
 }
 
 module.exports = {
-    tulisPertanyaan,
-    simpanContact,
+    saveContact,
 }
